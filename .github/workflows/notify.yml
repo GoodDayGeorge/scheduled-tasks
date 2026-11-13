@@ -1,0 +1,23 @@
+name: PushPlus Notify
+
+on:
+  schedule:
+    # Github use UTC timezone -8
+    - cron: '0 0 * * 1-5'
+  # allow trigger manually
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - run: pip install requests
+      - name: Send notification
+        env:
+          PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
+        run: python scripts/pushplus_notfiy.py
